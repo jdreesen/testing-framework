@@ -554,6 +554,8 @@ abstract class FunctionalTestCase extends BaseTestCase
                             $this->assertXmlStringEqualsXmlString((string)$value, (string)$record[$columns['fields'][$valueIndex]]);
                         } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                             $linesFromXmlValues[] = 'Diff for field "' . $columns['fields'][$valueIndex] . '":' . PHP_EOL . $e->getComparisonFailure()->getDiff();
+                        } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
+                            $linesFromXmlValues[] = 'Diff for field "' . $columns['fields'][$valueIndex] . '":' . PHP_EOL . $e->getComparisonFailure()->getDiff();
                         }
                     }
                     $value = '[see diff]';
@@ -592,6 +594,8 @@ abstract class FunctionalTestCase extends BaseTestCase
                 try {
                     $this->assertXmlStringEqualsXmlString((string)$value, (string)$record[$field]);
                 } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
+                    $differentFields[] = $field;
+                } catch (\PHPUnit\Framework\ExpectationFailedException $e) {
                     $differentFields[] = $field;
                 }
             } elseif ($value === null && $record[$field] !== $value) {
@@ -690,7 +694,11 @@ abstract class FunctionalTestCase extends BaseTestCase
             ]
         );
 
-        $php = \PHPUnit_Util_PHP::factory();
+        if (class_exists(\PHPUnit_Util_PHP::class)) {
+            $php = \PHPUnit_Util_PHP::factory();
+        } else {
+            $php = \PHPUnit\Util\PHP\AbstractPhpProcess::factory();
+        }
         $response = $php->runJob($template->render());
         $result = json_decode($response['stdout'], true);
 

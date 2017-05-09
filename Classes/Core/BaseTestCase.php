@@ -21,7 +21,7 @@ namespace TYPO3\TestingFramework\Core;
  * such as UnitTestCase or FunctionalTestCase
  *
  */
-abstract class BaseTestCase extends \PHPUnit_Framework_TestCase
+abstract class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Whether global variables should be backed up

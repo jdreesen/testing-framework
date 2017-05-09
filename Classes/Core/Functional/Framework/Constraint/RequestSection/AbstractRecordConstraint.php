@@ -14,12 +14,17 @@ namespace TYPO3\TestingFramework\Core\Functional\Framework\Constraint\RequestSec
  * The TYPO3 project - inspiring people to share!
  */
 
+use PHPUnit\Framework\Constraint\Constraint;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\ResponseSection;
+
+if (!class_exists(Constraint::class) && class_exists('PHPUnit_Framework_Constraint')) {
+    class_alias('PHPUnit_Framework_Constraint', Constraint::class);
+}
 
 /**
  * Model of frontend response
  */
-abstract class AbstractRecordConstraint extends \PHPUnit_Framework_Constraint
+abstract class AbstractRecordConstraint extends Constraint
 {
     /**
      * @var array
